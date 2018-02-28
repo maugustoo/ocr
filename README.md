@@ -15,3 +15,7 @@ This step applies multiple filters and crops the image to make it easier to read
 * Apply OCR in frames
 
 This step applies OCR to identify the sentences. Using tesseract library.
+
+* Apply spell checker in sentences
+
+This step applies spell checker in identified sentences. Using edit distance algorithm.
