@@ -58,13 +58,17 @@ public class ApplyOCR {
 
                 }
 
-                FileWriter arq = new FileWriter("E:\\Frames\\resultado.txt", true);
-                PrintWriter gravarArq = new PrintWriter(arq);
-                gravarArq.printf("Tempo em segundos: " + fileName + ":" + stringBuilder.toString() + "%n");
-                arq.close();
+                try {
+                    FileWriter arq = new FileWriter("E:\\Frames\\resultado.txt", true);
+                    PrintWriter gravarArq = new PrintWriter(arq);
+                    gravarArq.printf("Tempo em segundos: " + fileName + ":" + stringBuilder.toString() + "%n");
+                    arq.close();
 
-                System.out.println(stringBuilder.toString());
-                System.out.println();
+                    System.out.println(stringBuilder.toString());
+                    System.out.println();
+                } catch (Exception e) {
+                    continue;
+                }
 
             } else {
                 System.out.println("LIXO!!!!!");
@@ -73,3 +77,6 @@ public class ApplyOCR {
         }
     }
 }
+
+
+
