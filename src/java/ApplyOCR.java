@@ -11,10 +11,10 @@ public class ApplyOCR {
 
     public static void main(String[] args) throws Exception {
 
-        String dataDir = "E:\\Frames\\";
+        String dataDir = "E:\\Frames2\\";
         // String dataDir = "E:\\23-05-2017_Segunda_Camara_Ordinaria.mp4.frame\\";
 
-        String tesseractDir = "E:\\Frames\\";
+        String tesseractDir = "E:\\Frames2\\";
 
         String fileName = null;
         File folder = new File(dataDir);
@@ -43,25 +43,28 @@ public class ApplyOCR {
             System.out.println(fileName);
             StringBuilder stringBuilder = new StringBuilder();
             if (StringUtils.isNotBlank(texto) && StringUtils.isNumeric(texto.substring(0, 1))) {
-                // System.out.println(texto);
-                // System.out.println("TEXTO_FORMATADO");
-                // texto = texto.replaceAll("[^a-zA-Z0-9 -/\n:]", "");
-                // System.out.println(texto);
+                texto = texto.replaceAll("[^a-zA-Z0-9áàâãéèêíïóôõöúçñÁÀ ÃÉÈÍÏÓÔÕÖÚÇÑ -/\n:]", "");
+                texto = texto.trim();
                 String[] tokens = texto.split("\n");
-                for (int i = 0; i < tokens.length; i++) {
-                    if (i == 0) {
-                        stringBuilder.append(tokens[i]);
-                    } else {
-                        stringBuilder.append(" - ");
-                        stringBuilder.append(tokens[i]);
-                    }
+                String[] time = fileName.split("[.]");
+                if (tokens.length == 3) {
+                    stringBuilder.append("{");
+                    stringBuilder.append("\"tempo\": \"" + time[0] + "\",");
 
+                    tokens[0] = tokens[0].replaceAll("[^0-9/.\n-]", "");
+                    stringBuilder.append("\"processo\": \"" + tokens[0].trim() + "\",");
+
+                    tokens[1] = tokens[1].replaceAll("[^a-zA-ZáàâãéèêíïóôõöúçñÁÀ ÃÉÈÍÏÓÔÕÖÚÇÑ0-9\n ]", "");
+                    stringBuilder.append("\"nome\": \"" + tokens[1].trim() + "\",");
+
+                    tokens[2] = tokens[2].replaceAll("[^a-zA-ZáàâãéèêíïóôõöúçñÁÀ ÃÉÈÍÏÓÔÕÖÚÇÑ\n ]", "");
+                    stringBuilder.append("\"relator\": \"" + tokens[2].trim() + "\"");
+                    stringBuilder.append("}");
                 }
-
                 try {
                     FileWriter arq = new FileWriter("E:\\Frames\\resultado.txt", true);
                     PrintWriter gravarArq = new PrintWriter(arq);
-                    gravarArq.printf("Tempo em segundos: " + fileName + ":" + stringBuilder.toString() + "%n");
+                    gravarArq.printf(stringBuilder.toString() + "%n");
                     arq.close();
 
                     System.out.println(stringBuilder.toString());
@@ -77,6 +80,7 @@ public class ApplyOCR {
         }
     }
 }
+
 
 
 
