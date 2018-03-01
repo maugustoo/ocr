@@ -11,10 +11,10 @@ public class ApplyOCR {
 
     public static void main(String[] args) throws Exception {
 
-        String dataDir = "E:\\Frames2\\";
+        String dataDir = "E:\\Frames\\";
         // String dataDir = "E:\\23-05-2017_Segunda_Camara_Ordinaria.mp4.frame\\";
 
-        String tesseractDir = "E:\\Frames2\\";
+        String tesseractDir = "E:\\Frames\\";
 
         String fileName = null;
         File folder = new File(dataDir);
@@ -60,19 +60,20 @@ public class ApplyOCR {
                     tokens[2] = tokens[2].replaceAll("[^a-zA-ZáàâãéèêíïóôõöúçñÁÀ ÃÉÈÍÏÓÔÕÖÚÇÑ\n ]", "");
                     stringBuilder.append("\"relator\": \"" + tokens[2].trim() + "\"");
                     stringBuilder.append("}");
-                }
-                try {
-                    FileWriter arq = new FileWriter("E:\\Frames\\resultado.txt", true);
-                    PrintWriter gravarArq = new PrintWriter(arq);
-                    gravarArq.printf(stringBuilder.toString() + "%n");
-                    arq.close();
 
-                    System.out.println(stringBuilder.toString());
-                    System.out.println();
-                } catch (Exception e) {
-                    continue;
-                }
+                    try {
+                        FileWriter arq = new FileWriter("E:\\Frames\\resultado.txt", true);
+                        PrintWriter gravarArq = new PrintWriter(arq);
+                        gravarArq.printf(stringBuilder.toString() + "%n");
+                        arq.close();
 
+                        System.out.println(stringBuilder.toString());
+                        System.out.println();
+                    } catch (Exception e) {
+                        continue;
+                    }
+
+                }
             } else {
                 System.out.println("LIXO!!!!!");
             }
@@ -80,7 +81,6 @@ public class ApplyOCR {
         }
     }
 }
-
 
 
 
