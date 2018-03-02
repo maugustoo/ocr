@@ -1,3 +1,5 @@
+import java.io.File;
+
 import org.apache.commons.io.FilenameUtils;
 
 import com.aspose.imaging.Image;
@@ -11,8 +13,7 @@ public class ApplyFilter {
         license.setLicense(Thread.currentThread().getContextClassLoader().getResourceAsStream("Aspose.Total.Java.lic"));
 
         if (License.isLicensed()) {
-            String dataDir = "E:\\Frames2\\";
-            // String dataDir = "E:\\23-05-2017_Segunda_Camara_Ordinaria.mp4.frame\\";
+            String dataDir = "E:\\Frames\\";
             String imagePath = null;
 
             File folder = new File(dataDir);
@@ -44,16 +45,6 @@ public class ApplyFilter {
                     image.grayscale();
                     image.binarizeOtsu();
                     image.adjustGamma(2.5f, 2f, 2f);
-
-                    // JpegOptions jpegOptions = new JpegOptions()
-                    // {
-                    // {
-                    // setColorType(JpegCompressionColorMode.Grayscale);
-                    // setCompressionType(JpegCompressionMode.Progressive);
-                    // }
-                    // };
-                    //
-                    // image.save(outputPathJpg, jpegOptions);
                     image.save(outputPathJpg);
 
                 } finally {
@@ -63,28 +54,6 @@ public class ApplyFilter {
         } else {
             System.out.println("Aspose n?o licenciado");
         }
-
-        // try
-        // {
-        // image = (JpegImage) Image.load(imagePath);
-        // int[] colors = image.loadArgb32Pixels(image.getBounds());
-        // for (int x = 0; x < colors.length; x++)
-        // {
-        // colors[x] = colors[x] ^ 0xffffff;
-        // }
-        //
-        // image.saveArgb32Pixels(image.getBounds(), colors);
-        // image.save(dataDir + "scene03001_out_invert.jpg");
-        // }
-        //
-        // finally
-        // {
-        // if (image != null)
-        // {
-        // image.dispose();
-        // }
-        // }
-
     }
 }
 
