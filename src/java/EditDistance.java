@@ -1,7 +1,4 @@
 public class EditDistance {
-    public static void main(String[] args) throws Exception {
-        System.out.println(distance("11115354/2015-5", "014.252/2015-5"));
-    }
 
     public static int distance(String s1, String s2) {
         int edits[][] = new int[s1.length() + 1][s2.length() + 1];
