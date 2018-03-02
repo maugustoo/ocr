@@ -1,3 +1,4 @@
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -18,7 +19,7 @@ import org.bytedeco.javacv.Java2DFrameConverter;
 public class ApplySplitInVideo {
 
     public static void main(String[] args) {
-        String dataDir = "E:\\Frames\\28-11-2017_Primeira_Camara_Ordinaria.mp4";
+        String dataDir = "E:\\Frames2\\28-11-2017_Primeira_Camara_Ordinaria.mp4";
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         FileInputStream fis = null;
@@ -65,7 +66,7 @@ public class ApplySplitInVideo {
 
         grabber.start();
 
-        int secondOfVideo = 0;
+        Integer secondOfVideo = 0;
 
         // Percorrendo o vídeo, tirando os frames a cada segundo.
         for (long i = 1; i <= grabber.getLengthInTime(); i++) {
@@ -85,7 +86,7 @@ public class ApplySplitInVideo {
 
             if (i % 30 == 0) {
                 // Pasta na qual será salvo os frames.
-                FileOutputStream fos = new FileOutputStream("E:\\Frames\\" + ++secondOfVideo + ".png");
+                FileOutputStream fos = new FileOutputStream("E:\\Frames2\\" + String.format("%05d", ++secondOfVideo) + ".png");
                 fos.write(imageInByte);
                 FileDescriptor fd = fos.getFD();
                 fos.flush();
@@ -96,3 +97,4 @@ public class ApplySplitInVideo {
 
     }
 }
+

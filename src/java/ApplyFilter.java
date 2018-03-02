@@ -1,5 +1,3 @@
-import java.io.File;
-
 import org.apache.commons.io.FilenameUtils;
 
 import com.aspose.imaging.Image;
@@ -13,7 +11,7 @@ public class ApplyFilter {
         license.setLicense(Thread.currentThread().getContextClassLoader().getResourceAsStream("Aspose.Total.Java.lic"));
 
         if (License.isLicensed()) {
-            String dataDir = "E:\\Frames\\";
+            String dataDir = "E:\\Frames2\\";
             // String dataDir = "E:\\23-05-2017_Segunda_Camara_Ordinaria.mp4.frame\\";
             String imagePath = null;
 
@@ -34,7 +32,8 @@ public class ApplyFilter {
                         com.aspose.imaging.Image
                                 .load(imagePath);
 
-                outputPathJpg = dataDir + fileName + ".jpg";
+                String[] time = fileName.split("[.]");
+                outputPathJpg = dataDir + String.format("%05d", Integer.parseInt(time[0])) + ".jpg";
                 png.save(outputPathJpg, new com.aspose.imaging.imageoptions.JpegOptions());
 
                 RasterImage image = (RasterImage) Image.load(outputPathJpg);
@@ -44,7 +43,7 @@ public class ApplyFilter {
                     image.adjustContrast(100);
                     image.grayscale();
                     image.binarizeOtsu();
-                    // image.adjustGamma(2.5f, 2f, 2f);
+                    image.adjustGamma(2.5f, 2f, 2f);
 
                     // JpegOptions jpegOptions = new JpegOptions()
                     // {
@@ -88,3 +87,4 @@ public class ApplyFilter {
 
     }
 }
+

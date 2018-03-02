@@ -10,15 +10,10 @@ import org.apache.commons.lang.StringUtils;
 public class ApplyOCR {
 
     public static void main(String[] args) throws Exception {
-        String[] processos = {"000.621/2014-5", "002.964/2012-0", "005.867/2004-9", "008.213/2016-0", "010.450/1997-1",
-                "014.252/2015-5", "014.499/2017-7", "001.225/2014-6", "005.972/2015-9", "012.697/2017-6", "016.254/2015-5",
-                "020.690/2014-2", "001.208/2015-2", "018.590/2014-4", "019.501/2017-0", "022.094/2008-9", "025.968/2012-2",
-                "038.217/2012-0"};
-
-        String dataDir = "E:\\Frames\\";
+        String dataDir = "E:\\Frames2\\";
         // String dataDir = "E:\\23-05-2017_Segunda_Camara_Ordinaria.mp4.frame\\";
 
-        String tesseractDir = "E:\\Frames\\";
+        String tesseractDir = "E:\\Frames2\\";
 
         String fileName = null;
         File folder = new File(dataDir);
@@ -56,20 +51,6 @@ public class ApplyOCR {
                     stringBuilder.append("\"tempo\": \"" + time[0] + "\",");
 
                     tokens[0] = tokens[0].replaceAll("[^0-9/.\n-]", "");
-
-                    int indiceMelhorDistancia = 0;
-                    int melhordistancia = 1000000;
-
-                    for (int i = 0; i < processos.length; i++) {
-                        int dist = EditDistance.distance(processos[i], tokens[0]);
-
-                        if (dist < melhordistancia) {
-                            melhordistancia = dist;
-                            indiceMelhorDistancia = i;
-                        }
-
-                    }
-
                     stringBuilder.append("\"processo\": \"" + tokens[0].trim() + "\",");
 
                     tokens[1] = tokens[1].replaceAll("[^a-zA-ZáàâãéèêíïóôõöúçñÁÀ ÃÉÈÍÏÓÔÕÖÚÇÑ0-9\n ]", "");
@@ -79,10 +60,12 @@ public class ApplyOCR {
                     stringBuilder.append("\"relator\": \"" + tokens[2].trim() + "\"");
                     stringBuilder.append("}");
 
-                    stringBuilder.append(" -- dist: " + melhordistancia + " - " + processos[indiceMelhorDistancia]);
+                    String[] spellCheckerResult = spellChecker(tokens[0]);
+
+                    stringBuilder.append(" -- dist: " + spellCheckerResult[0] + " - " + spellCheckerResult[1]);
 
                     try {
-                        FileWriter arq = new FileWriter("E:\\Frames\\resultado.txt", true);
+                        FileWriter arq = new FileWriter("E:\\Frames2\\resultado.txt", true);
                         PrintWriter gravarArq = new PrintWriter(arq);
                         gravarArq.printf(stringBuilder.toString() + "%n");
                         arq.close();
@@ -99,6 +82,29 @@ public class ApplyOCR {
             }
 
         }
+    }
+
+    public static String[] spellChecker(String processo) {
+        String[] processos = {"000.621/2014-5", "002.964/2012-0", "005.867/2004-9", "008.213/2016-0", "010.450/1997-1",
+                "014.252/2015-5", "014.499/2017-7", "001.225/2014-6", "005.972/2015-9", "012.697/2017-6", "016.254/2015-5",
+                "020.690/2014-2", "001.208/2015-2", "018.590/2014-4", "019.501/2017-0", "022.094/2008-9", "025.968/2012-2",
+                "038.217/2012-0"};
+
+        int indiceMelhorDistancia = 0;
+        Integer melhordistancia = 1000000;
+
+        for (int i = 0; i < processos.length; i++) {
+            int dist = EditDistance.distance(processos[i], processo);
+
+            if (dist < melhordistancia) {
+                melhordistancia = dist;
+                indiceMelhorDistancia = i;
+            }
+        }
+
+        String[] result = {melhordistancia.toString(), processos[indiceMelhorDistancia]};
+
+        return result;
     }
 }
 
