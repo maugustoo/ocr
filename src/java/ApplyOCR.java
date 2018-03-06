@@ -9,11 +9,18 @@ import org.apache.commons.lang.StringUtils;
 
 public class ApplyOCR {
 
-    public static void main(String[] args) throws Exception {
-        String dataDir = "E:\\Frames2\\";
+    public static void main(String[] args) {
+        String dataDir = "E:\\Frames\\";
+        String tesseractDir = "E:\\Frames\\";
 
-        String tesseractDir = "E:\\Frames2\\";
+        try {
+            applyOCR(dataDir, tesseractDir);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    public static void applyOCR(String dataDir, String tesseractDir) throws Exception {
         String fileName = null;
         File folder = new File(dataDir);
         String imagePath = null;
@@ -33,49 +40,75 @@ public class ApplyOCR {
 
             String texto = tesseract.doOCR(new File(imagePath));
 
-            System.out.println(fileName);
-            StringBuilder stringBuilder = new StringBuilder();
             if (StringUtils.isNotBlank(texto) && StringUtils.isNumeric(texto.substring(0, 1))) {
-                texto = texto.replaceAll("[^a-zA-Z0-9áàâãéèêíïóôõöúçñÁÀ ÃÉÈÍÏÓÔÕÖÚÇÑ -/\n:]", "");
-                texto = texto.trim();
-                String[] tokens = texto.split("\n");
-                String[] time = fileName.split("[.]");
-                if (tokens.length == 3 && tokens[0].replaceAll("[^0-9/.\n-]", "").length() >= 5) {
-                    stringBuilder.append("{");
-                    stringBuilder.append("\"tempo\": \"" + time[0] + "\",");
+                String[] tokens = formatOCRData(texto);
 
-                    tokens[0] = tokens[0].replaceAll("[^0-9/.\n-]", "");
-                    String[] spellCheckerResult = spellChecker(tokens[0]);
+                String time = getNameOfFileWithoutExtension(fileName);
 
-                    stringBuilder.append("\"distance\": \"" + spellCheckerResult[0] + "\",");
-
-                    stringBuilder.append("\"processo\": \"" + spellCheckerResult[1] + "\",");
-
-                    tokens[1] = tokens[1].replaceAll("[^a-zA-ZáàâãéèêíïóôõöúçñÁÀ ÃÉÈÍÏÓÔÕÖÚÇÑ0-9\n ]", "");
-                    stringBuilder.append("\"nome\": \"" + tokens[1].trim() + "\",");
-
-                    tokens[2] = tokens[2].replaceAll("[^a-zA-ZáàâãéèêíïóôõöúçñÁÀ ÃÉÈÍÏÓÔÕÖÚÇÑ\n ]", "");
-                    stringBuilder.append("\"relator\": \"" + tokens[2].trim() + "\"");
-                    stringBuilder.append("}");
+                if (tokens.length == 3 && tokens[0].length() >= 5) {
+                    String outData = formatOutputData(tokens, time, dataDir);
 
                     try {
-                        FileWriter arq = new FileWriter(dataDir + "resultado.txt", true);
-                        PrintWriter gravarArq = new PrintWriter(arq);
-                        gravarArq.printf(stringBuilder.toString() + "%n");
-                        arq.close();
+                        writeOutput(dataDir, outData);
 
-                        System.out.println(stringBuilder.toString());
+                        System.out.println(outData);
                         System.out.println();
                     } catch (Exception e) {
                         continue;
                     }
 
+                } else {
+                    continue;
                 }
             } else {
                 System.out.println("LIXO!!!!!");
             }
 
         }
+    }
+
+    public static void writeOutput(String dataDir, String outData) throws Exception {
+        FileWriter arq = new FileWriter(dataDir + "resultado.txt", true);
+        PrintWriter gravarArq = new PrintWriter(arq);
+        gravarArq.printf(outData);
+        arq.close();
+    }
+
+    public static String formatOutputData(String[] tokens, String time, String dataDir) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("{");
+        stringBuilder.append("\"tempo\": \"" + time + "\",");
+
+        String[] spellCheckerResult = spellChecker(tokens[0]);
+
+        stringBuilder.append("\"distance\": \"" + spellCheckerResult[0] + "\",");
+
+        stringBuilder.append("\"processo\": \"" + spellCheckerResult[1] + "\",");
+
+        tokens[1] = tokens[1].replaceAll("[^a-zA-ZáàâãéèêíïóôõöúçñÁÀ ÃÉÈÍÏÓÔÕÖÚÇÑ0-9\n ]", "");
+        stringBuilder.append("\"nome\": \"" + tokens[1].trim() + "\",");
+
+        tokens[2] = tokens[2].replaceAll("[^a-zA-ZáàâãéèêíïóôõöúçñÁÀ ÃÉÈÍÏÓÔÕÖÚÇÑ\n ]", "");
+        stringBuilder.append("\"relator\": \"" + tokens[2].trim() + "\"");
+        stringBuilder.append("}" + "%n");
+
+        return stringBuilder.toString();
+    }
+
+    public static String getNameOfFileWithoutExtension(String nameWithExtension) {
+        String[] time = nameWithExtension.split("[.]");
+
+        return time[0];
+    }
+
+    public static String[] formatOCRData(String ocrData) {
+        ocrData = ocrData.replaceAll("[^a-zA-Z0-9áàâãéèêíïóôõöúçñÁÀ ÃÉÈÍÏÓÔÕÖÚÇÑ -/\n:]", "");
+        ocrData = ocrData.trim();
+        String[] tokens = ocrData.split("\n");
+        tokens[0] = tokens[0].replaceAll("[^0-9/.\n-]", "");
+
+        return tokens;
     }
 
     public static String[] spellChecker(String processo) {
@@ -124,5 +157,4 @@ public class ApplyOCR {
         return result;
     }
 }
-
 
