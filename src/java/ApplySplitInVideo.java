@@ -19,14 +19,17 @@ import org.bytedeco.javacv.Java2DFrameConverter;
 public class ApplySplitInVideo {
 
     public static void main(String[] args) {
-        String dataDir = "E:\\Frames2\\28-11-2017_Primeira_Camara_Ordinaria.mp4";
+        String dataDir = "E:\\Frames\\28-11-2017_Primeira_Camara_Ordinaria.mp4";
 
+        splitVideo(dataDir);
+    }
+
+    public static void splitVideo(String dataDir) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(new File(dataDir));
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -41,7 +44,6 @@ public class ApplySplitInVideo {
 
             criarThumbnailDoVideo(videoBytes);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -86,7 +88,7 @@ public class ApplySplitInVideo {
 
             if (i % 30 == 0) {
                 // Pasta na qual será salvo os frames.
-                FileOutputStream fos = new FileOutputStream("E:\\Frames2\\" + String.format("%05d", ++secondOfVideo) + ".png");
+                FileOutputStream fos = new FileOutputStream("E:\\Frames\\" + String.format("%05d", ++secondOfVideo) + ".png");
                 fos.write(imageInByte);
                 FileDescriptor fd = fos.getFD();
                 fos.flush();
