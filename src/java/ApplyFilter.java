@@ -7,20 +7,25 @@ import com.aspose.imaging.License;
 import com.aspose.imaging.RasterImage;
 
 public class ApplyFilter {
-    public static void main(String... args) throws Exception {
+    public static void main(String... args) {
+        String dataDir = "E:\\Frames\\";
+
+        takeImagesAndApplyFilter(dataDir);
+    }
+
+    public static void takeImagesAndApplyFilter(String dataDir) {
         // The path to the documents directory.
         License license = new License();
         license.setLicense(Thread.currentThread().getContextClassLoader().getResourceAsStream("Aspose.Total.Java.lic"));
 
         if (License.isLicensed()) {
-            String dataDir = "E:\\Frames\\";
             String imagePath = null;
 
             File folder = new File(dataDir);
             String fileName = null;
             String outputPathJpg = null;
-            for (File fileEntry : folder.listFiles()) {
 
+            for (File fileEntry : folder.listFiles()) {
                 fileName = fileEntry.getName();
 
                 if (!FilenameUtils.getExtension(fileName).equals("png")) {
@@ -37,23 +42,29 @@ public class ApplyFilter {
                 outputPathJpg = dataDir + String.format("%05d", Integer.parseInt(time[0])) + ".jpg";
                 png.save(outputPathJpg, new com.aspose.imaging.imageoptions.JpegOptions());
 
-                RasterImage image = (RasterImage) Image.load(outputPathJpg);
-                try {
-                    image.crop(375, 370, 880, 66);
-                    image.adjustBrightness(-100);
-                    image.adjustContrast(100);
-                    image.grayscale();
-                    image.binarizeOtsu();
-                    image.adjustGamma(2.5f, 2f, 2f);
-                    image.save(outputPathJpg);
-
-                } finally {
-                    image.dispose();
-                }
+                applyFilter(outputPathJpg);
             }
         } else {
             System.out.println("Aspose n?o licenciado");
         }
     }
+
+    public static void applyFilter(String outputPathJpg) {
+        RasterImage image = (RasterImage) Image.load(outputPathJpg);
+
+        try {
+            image.crop(375, 370, 880, 66);
+            image.adjustBrightness(-100);
+            image.adjustContrast(100);
+            image.grayscale();
+            image.binarizeOtsu();
+            image.adjustGamma(2.5f, 2f, 2f);
+            image.save(outputPathJpg);
+
+        } finally {
+            image.dispose();
+        }
+    }
 }
+
 
