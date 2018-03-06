@@ -13,8 +13,12 @@ import org.json.JSONObject;
 public class FormatOutput {
 
     public static void main(String[] args) {
-        String dataDir = "E:\\Frames2\\";
+        String dataDir = "E:\\Frames\\";
 
+        applyFormatOutput(dataDir);
+    }
+
+    public static void applyFormatOutput(String dataDir) {
         List<String> lines = readLinesOfFile(dataDir);
 
         try {
@@ -30,7 +34,8 @@ public class FormatOutput {
         for (int i = 0; i < lines.size() - 1; i++) {
             JSONObject jsonObj = new JSONObject(lines.get(i));
 
-            Integer time = Integer.parseInt(jsonObj.getString("tempo"));
+            // -1 Para ajustar o tempo para a leitura do processo
+            Integer time = Integer.parseInt(jsonObj.getString("tempo")) - 1;
             String process = jsonObj.getString("processo");
             Integer distance = Integer.parseInt(jsonObj.getString("distance"));
 
@@ -57,7 +62,6 @@ public class FormatOutput {
                     printInFile(stringBuilder, dataDir);
                 }
             }
-
         }
     }
 
@@ -90,5 +94,4 @@ public class FormatOutput {
     }
 
 }
-
 

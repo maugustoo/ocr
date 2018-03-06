@@ -1,4 +1,5 @@
 
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -19,12 +20,14 @@ import org.bytedeco.javacv.Java2DFrameConverter;
 public class ApplySplitInVideo {
 
     public static void main(String[] args) {
-        String dataDir = "E:\\Frames\\28-11-2017_Primeira_Camara_Ordinaria.mp4";
+        String dataDir = "E:\\Frames\\";
+        String videoName = "28-11-2017_Primeira_Camara_Ordinaria.mp4";
+        String outputDir = "E:\\Frames\\";
 
-        splitVideo(dataDir);
+        splitVideo(dataDir + videoName, outputDir);
     }
 
-    public static void splitVideo(String dataDir) {
+    public static void splitVideo(String dataDir, String outputDir) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         FileInputStream fis = null;
         try {
@@ -42,14 +45,14 @@ public class ApplySplitInVideo {
 
             byte[] videoBytes = baos.toByteArray();
 
-            criarThumbnailDoVideo(videoBytes);
+            criarThumbnailDoVideo(videoBytes, outputDir);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    public static void criarThumbnailDoVideo(byte[] bytes) throws IOException {
+    public static void criarThumbnailDoVideo(byte[] bytes, String outputDir) throws IOException {
 
         // Instanciando e carregando byte para stream
         InputStream inputStream = new ByteArrayInputStream(bytes);
@@ -88,7 +91,7 @@ public class ApplySplitInVideo {
 
             if (i % 30 == 0) {
                 // Pasta na qual será salvo os frames.
-                FileOutputStream fos = new FileOutputStream("E:\\Frames\\" + String.format("%05d", ++secondOfVideo) + ".png");
+                FileOutputStream fos = new FileOutputStream(outputDir + String.format("%05d", ++secondOfVideo) + ".png");
                 fos.write(imageInByte);
                 FileDescriptor fd = fos.getFD();
                 fos.flush();
