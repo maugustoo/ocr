@@ -12,9 +12,19 @@ import org.json.JSONObject;
 
 public class FormatOutput {
 
-    public static void main(String[] args) throws Exception {
-        List<String> lines = readLinesOfFile();
+    public static void main(String[] args) {
+        String dataDir = "E:\\Frames2\\";
 
+        List<String> lines = readLinesOfFile(dataDir);
+
+        try {
+            formatOutput(lines, dataDir);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void formatOutput(List<String> lines, String dataDir) throws Exception {
         String processBase = null;
 
         for (int i = 0; i < lines.size() - 1; i++) {
@@ -36,7 +46,7 @@ public class FormatOutput {
                 if (process.equals(nextProcess)) {
                     processBase = process;
                     StringBuilder stringBuilder = new StringBuilder("Tempo: " + time + ", Processo: " + process);
-                    printInFile(stringBuilder);
+                    printInFile(stringBuilder, dataDir);
                 }
             } else {
                 if (process.equals(processBase)) {
@@ -44,15 +54,15 @@ public class FormatOutput {
                 } else if (process.equals(nextProcess)) {
                     processBase = process;
                     StringBuilder stringBuilder = new StringBuilder("Tempo: " + time + ", Processo: " + process);
-                    printInFile(stringBuilder);
+                    printInFile(stringBuilder, dataDir);
                 }
             }
 
         }
     }
 
-    public static List<String> readLinesOfFile() {
-        Path path = Paths.get("E:\\Frames2\\", "resultado.txt");
+    public static List<String> readLinesOfFile(String dataDir) {
+        Path path = Paths.get(dataDir, "resultado.txt");
 
         Charset charset = Charset.forName("ISO-8859-1");
         List<String> lines = null;
@@ -66,9 +76,7 @@ public class FormatOutput {
         return lines;
     }
 
-    public static void printInFile(StringBuilder stringBuilder) {
-        String dataDir = "E:\\Frames2\\";
-
+    public static void printInFile(StringBuilder stringBuilder, String dataDir) {
         FileWriter arq = null;
         try {
             arq = new FileWriter(dataDir + "output.txt", true);
