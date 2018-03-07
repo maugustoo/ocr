@@ -19,3 +19,7 @@ This step applies OCR to identify the sentences. Using tesseract library.
 * Apply spell checker in sentences
 
 This step applies spell checker in identified sentences. Using edit distance algorithm.
+
+* Apply parallelism
+
+This step uses the concurrent paradigm to be able to process for more than one video at the same time.
