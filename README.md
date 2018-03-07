@@ -2,7 +2,7 @@
 
 Application made to extract messages from a video.
 
-Contains three main steps:
+Contains five main steps:
 
 * Apply split in video
 
