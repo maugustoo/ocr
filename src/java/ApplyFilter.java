@@ -10,7 +10,12 @@ public class ApplyFilter {
     public static void main(String... args) {
         String dataDir = "E:\\Frames\\";
 
-        takeImagesAndApplyFilter(dataDir);
+	try {
+		takeImagesAndApplyFilter(dataDir);
+	} catch (FileNotFoundException e) {
+		e.printStackTrace();
+	}
+        
     }
 
     public static void takeImagesAndApplyFilter(String dataDir) {
