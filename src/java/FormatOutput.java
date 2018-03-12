@@ -1,4 +1,3 @@
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,7 +12,7 @@ import org.json.JSONObject;
 public class FormatOutput {
 
     public static void main(String[] args) {
-        String dataDir = "E:\\Frames\\";
+        String dataDir = "E:\\TesteFinal\\2016\\10-Outubro\\04-10-2016_Primeira_ Camara_Ordinaria\\";
 
         applyFormatOutput(dataDir);
     }
@@ -50,7 +49,7 @@ public class FormatOutput {
             if (processBase == null) {
                 if (process.equals(nextProcess)) {
                     processBase = process;
-                    StringBuilder stringBuilder = new StringBuilder("Tempo: " + time + ", Processo: " + process);
+                    StringBuilder stringBuilder = new StringBuilder("Tempo: " + removeFrameError(time) + ", Processo: " + process);
                     printInFile(stringBuilder, dataDir);
                 }
             } else {
@@ -58,11 +57,17 @@ public class FormatOutput {
                     continue;
                 } else if (process.equals(nextProcess)) {
                     processBase = process;
-                    StringBuilder stringBuilder = new StringBuilder("Tempo: " + time + ", Processo: " + process);
+                    StringBuilder stringBuilder = new StringBuilder("Tempo: " + removeFrameError(time) + ", Processo: " + process);
                     printInFile(stringBuilder, dataDir);
                 }
             }
         }
+    }
+
+    public static Integer removeFrameError(int time) {
+        Integer realTime = (int) ((time * 30) / 29.97);
+
+        return realTime;
     }
 
     public static List<String> readLinesOfFile(String dataDir) {
@@ -94,4 +99,5 @@ public class FormatOutput {
     }
 
 }
+
 
