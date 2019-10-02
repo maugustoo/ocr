@@ -5,19 +5,20 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
 
 public class FormatOutput {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         String dataDir = "E:\\TesteFinal\\2016\\10-Outubro\\04-10-2016_Primeira_ Camara_Ordinaria\\";
 
         applyFormatOutput(dataDir);
     }
 
-    public static void applyFormatOutput(String dataDir) {
+    public static void applyFormatOutput(String dataDir) throws Exception {
         List<String> lines = readLinesOfFile(dataDir);
 
         try {
@@ -49,7 +50,8 @@ public class FormatOutput {
             if (processBase == null) {
                 if (process.equals(nextProcess)) {
                     processBase = process;
-                    StringBuilder stringBuilder = new StringBuilder("Tempo: " + removeFrameError(time) + ", Processo: " + process);
+                    StringBuilder stringBuilder =
+                            new StringBuilder("Tempo: " + removeFrameError(time) + ", Processo: " + process);
                     printInFile(stringBuilder, dataDir);
                 }
             } else {
@@ -57,7 +59,8 @@ public class FormatOutput {
                     continue;
                 } else if (process.equals(nextProcess)) {
                     processBase = process;
-                    StringBuilder stringBuilder = new StringBuilder("Tempo: " + removeFrameError(time) + ", Processo: " + process);
+                    StringBuilder stringBuilder =
+                            new StringBuilder("Tempo: " + removeFrameError(time) + ", Processo: " + process);
                     printInFile(stringBuilder, dataDir);
                 }
             }
@@ -70,7 +73,7 @@ public class FormatOutput {
         return realTime;
     }
 
-    public static List<String> readLinesOfFile(String dataDir) {
+    public static List<String> readLinesOfFile(String dataDir) throws Exception {
         Path path = Paths.get(dataDir, "resultado.txt");
 
         Charset charset = Charset.forName("ISO-8859-1");
@@ -79,6 +82,7 @@ public class FormatOutput {
         try {
             lines = Files.readAllLines(path, charset);
         } catch (IOException e) {
+            lines = new ArrayList<String>();
             System.out.println(e);
         }
 
@@ -99,5 +103,6 @@ public class FormatOutput {
     }
 
 }
+
 
 
